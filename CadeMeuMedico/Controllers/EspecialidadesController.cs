@@ -53,8 +53,37 @@ namespace CadeMeuMedico.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-                
+
             return View(especialidade);
+        }
+
+
+        public ActionResult Excluir(long? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
+            }
+
+            Especialidades especialidade = db.Especialidades.Find(id);
+            if (especialidade == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(especialidade);
+        }
+
+
+        // POST: especialidade/excluir/5
+        [HttpPost, ActionName("Excluir")]
+        [ValidateAntiForgeryToken]
+        public ActionResult ExcluirConfirado(long id)
+        {
+            Especialidades especialidade = db.Especialidades.Find(id);
+            db.Especialidades.Remove(especialidade);
+            db.SaveChanges();
+            return RedirectToAction("Index");
         }
     }
 }
